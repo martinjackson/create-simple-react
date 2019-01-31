@@ -143,8 +143,10 @@ function doIt( name ) {
     npmInstall('--save', dependencies);
     npmInstall('--saveDev', devDependencies);
 
-    const result = childProcess.execSync('git init', {stdio: 'inherit'} );
-    console.log(result);
+    if (!fs.existsSync(path.join(root, '.git'))) {
+        console.log(`${chalk.green('Initializing Git repo for this driectory.')}.`);
+        childProcess.execSync('git init', {stdio: 'inherit'} );
+    }
 
 }
 
