@@ -4,7 +4,9 @@
   "description": "alternative to create-react-app / no eject, Keep It Simple, opinionated for shop standard",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dry-run": "release-it --dry-run -n",
+    "release": "release-it"
   },
   "repository": {
     "type": "git",
@@ -28,5 +30,8 @@
     "chalk": "^2.4.2",
     "fs-extra": "^7.0.1",
     "validate-npm-package-name": "^3.0.0"
+  },
+  "devDependencies": {
+    "release-it": "^10.0.7"
   }
 }
