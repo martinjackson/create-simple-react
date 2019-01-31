@@ -1,0 +1,32 @@
+{
+  "name": "create-simple-react",
+  "version": "1.0.0",
+  "description": "alternative to create-react-app / no eject, Keep It Simple, opinionated for shop standard",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinjackson/create-simple-react.git"
+  },
+  "keywords": [
+    "create",
+    "project",
+    "react",
+    "babel",
+    "wepback",
+    "KISS"
+  ],
+  "author": "Martin A. Jackson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/martinjackson/create-simple-react/issues"
+  },
+  "homepage": "https://github.com/martinjackson/create-simple-react#readme",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "fs-extra": "^7.0.1",
+    "validate-npm-package-name": "^3.0.0"
+  }
+}
