@@ -1,11 +1,14 @@
 # create-simple-react
-alternative to create-react-app, no eject, opinionated for shop standard
+
+An alternative to create-react-app, no eject, opinionated for a shop standard.
 
 There is no ejecting !!  for those you want to tinker, the config files
 are in the root directory with the package.json file.  If you mess them up,
-you can run create-simple-react and it will restore the original config files.
+you can run create-simple-react on the same directory and it will restore
+the original config files.
 
 This project was ruled by three concepts:
+
 1. K.I.S.S. -- Keep It Sublimely Simple
 2. D.R.Y. -- Don't Repeat Yourself
 3. Everything in plain sight
