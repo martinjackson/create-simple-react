@@ -141,7 +141,7 @@ function doIt( name ) {
 
     process.chdir(root);
     npmInstall('--save', dependencies);
-    npmInstall('--saveDev', devDependencies);
+    npmInstall('--save-dev', devDependencies);
 
     if (!fs.existsSync(path.join(root, '.git'))) {
         console.log(`${chalk.green('Initializing Git repo for this driectory.')}.`);
