@@ -78,3 +78,38 @@ npm start
 |   src/index.js     | Top App Module |
 |   src/Example.js   | An example React Component used by index.js |
 |   test             | directory for your Jest unit tests |
+
+## Further Study
+
+Where is all started [ReactJS](https://reactjs.org/)
+
+Wes Bos' [React for Beginner](https://reactforbeginners.com/)
+
+Elija Manor's Article on [npm initializers](https://elijahmanor.com/npm-init-initializer/)
+<-- great article!!
+
+Other npm init examples
+
+- create-deck - Create mdx-deck presentations
+
+   ```bash
+   npm init deck your-app-name
+   ```
+
+- create-component-app - Tool to generate different types of React components from the terminal. 💻
+
+   ```bash
+   npm init component-app
+   ```
+
+- create-hintrc - 💡 A hinting engine for the web https://webhint.io/
+
+   ```bash
+   npm init hintrc
+   ```
+
+- create-esm - Create esm enabled packages
+
+   ```bash
+   npm init esm
+   ```
