@@ -8,6 +8,8 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const validProjectName = require('validate-npm-package-name');
 
+var pjson = require('./package.json');
+
 const [,, ...args] = process.argv
 
 const dependencies = [
@@ -152,4 +154,14 @@ function doIt( name ) {
 
 }
 
-doIt(args[0]);
+if (args[0] && !args[0].startsWith('-')) {
+    doIt(args[0]);
+  }
+  else {
+    if (!args[0])
+       console.log(chalk.red('No directory specified.'));
+
+    console.log(`create-simple-react ${pjson.version}`);
+    console.log(`${chalk.blue('How to use:')} npm init simple-react [your new directory]`);
+  }
+
