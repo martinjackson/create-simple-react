@@ -102,10 +102,13 @@ function padLeft(s, len, p=' ') {
 function copyFiles(fromDir, toDir, verbose) {
     let  files = fs.readdirSync(fromDir);
     for (var i in files) {
+        const dest = files[i]
+        if (dest === 'gitignore')   // workaround .gitignore filtered out of npm commit
+           dest = '.gitignore'
         const from = path.join(fromDir, files[i])
-        const to = path.join(toDir, files[i])
+        const to = path.join(toDir, dest)
         if (verbose) {
-          const name = padLeft(files[i], 18)
+          const name = padLeft(dest, 18)
           console.log(`${name} => ${toDir}`)
         }
         fs.copySync(from, to)
