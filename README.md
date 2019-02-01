@@ -13,24 +13,24 @@ This project was ruled by three concepts:
 2. D.R.Y. -- Don't Repeat Yourself
 3. Everything in plain sight
 
-
 ## How to use
 
 ```bash
 npm init simple-react [New Project Directory]
 ```
+
 ### Example
 
 ```bash
-$ cd ~/projects
-$ npm init simple-react lab-status
+cd ~/projects
+npm init simple-react lab-status
 ```
 
    3 minutes later...
 
 ```bash
-$ cd lab-status
-$ npm start
+cd lab-status
+npm start
 ```
 
    open a browser to [http://localhost:8080](http://localhost:8080)
@@ -42,22 +42,27 @@ $ npm start
 ## Project Scripts
 
 ### npm run start
+
     runs the application is Live Reload where as you save code code in src/,
     you will see the changes on the web page http://localhost:8080
 
 ### npm run build
+
     creates a bundle.js in the public/ ready to test before publishing on a production server.
 
 ### npm run demo
+
     tests the production files public/ on last time before publishing.
 
 ### npm run test
+
     run the Jest Unit tests in the test directory
 
 ### npm run lint
+
     runs ESLint against all your source code -- catch syntax errors early
 
-#### Your project directory:
+#### Your project directory
 
 |                    |                                                                       |
 | -----------------  | ----------------------------------------------------------------------|
@@ -73,4 +78,3 @@ $ npm start
 |   src/index.js     | Top App Module |
 |   src/Example.js   | An example React Component used by index.js |
 |   test             | directory for your Jest unit tests |
-
