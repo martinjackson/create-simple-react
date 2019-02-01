@@ -10,7 +10,7 @@ const validProjectName = require('validate-npm-package-name');
 
 var pjson = require('./package.json');
 
-const [,, ...args] = process.argv
+const args = require('minimist')(process.argv.slice(2), {boolean:true});
 
 const dependencies = [
     'react',
@@ -95,11 +95,19 @@ function checkAppName(appName) {
     checkAgainstDependancies(appName, devDependencies);
 }
 
-function copyFiles(fromDir, toDir) {
+function padLeft(s, len, p=' ') {
+    return String(p.repeat(len) + s).slice(-len)
+ }
+
+function copyFiles(fromDir, toDir, verbose) {
     let  files = fs.readdirSync(fromDir);
     for (var i in files) {
         const from = path.join(fromDir, files[i])
         const to = path.join(toDir, files[i])
+        if (verbose) {
+          const name = padLeft(files[i], 18)
+          console.log(`${name} => ${toDir}`)
+        }
         fs.copySync(from, to)
     }
 }
@@ -113,7 +121,7 @@ function npmInstall(save, depList) {
     childProcess.execSync(command, {stdio: 'inherit'} );
 }
 
-function doIt( name ) {
+function doIt(name, verbose, skip) {
     const root = path.resolve(name);
     const appName = path.basename(root);
 
@@ -137,31 +145,35 @@ function doIt( name ) {
 
     let fromDir = path.join(__dirname, 'template')
     let toDir = path.join(root)
-    copyFiles(fromDir, toDir)
+    copyFiles(fromDir, toDir, verbose)
 
     fromDir = path.join(__dirname, 'template', 'src')
     toDir = path.join(root, 'src')
-    copyFiles(fromDir, toDir)
+    copyFiles(fromDir, toDir, verbose)
 
     process.chdir(root);
-    npmInstall('--save', dependencies);
-    npmInstall('--save-dev', devDependencies);
+    if (!skip) {
+      npmInstall('--save', dependencies);
+      npmInstall('--save-dev', devDependencies);
 
-    if (!fs.existsSync(path.join(root, '.git'))) {
+      if (!fs.existsSync(path.join(root, '.git'))) {
         console.log(`${chalk.green('Initializing Git repo for this driectory.')}.`);
         childProcess.execSync('git init', {stdio: 'inherit'} );
+      }
     }
-
 }
 
-if (args[0] && !args[0].startsWith('-')) {
-    doIt(args[0]);
-  }
-  else {
-    if (!args[0])
-       console.log(chalk.red('No directory specified.'));
+const newDir = args._[0]   // first non-switch argument
+if (newDir)
+    doIt(newDir, args.verbose, args.skip);
+  else
+    console.log(chalk.red('No directory specified.'));
 
+if (!newDir || args.help) {
     console.log(`create-simple-react ${pjson.version}`);
-    console.log(`${chalk.blue('How to use:')} npm init simple-react [your new directory]`);
+    console.log(`${chalk.blue('How to use:')} npm init simple-react [your new directory] {options}`);
+    console.log(`    ${chalk.green('--verbose')}  show as files copied into new project. `);
+    console.log(`    ${chalk.green('--skip')}     skip the npm installs`);
+    console.log(`    ${chalk.green('--help')}     display how to use`);
   }
 
