@@ -3,6 +3,9 @@
   "version": "0.1.1",
   "description": "alternative to create-react-app / no eject, Keep It Simple, opinionated for shop standard",
   "main": "index.js",
+  "bin": {
+    "create-simple-react": "./index.js"
+  },
   "scripts": {
     "test": "jest",
     "dry-run": "release-it --dry-run -n",

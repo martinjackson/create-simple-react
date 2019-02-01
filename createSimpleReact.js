@@ -8,6 +8,8 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const validProjectName = require('validate-npm-package-name');
 
+const [,, ...args] = process.argv
+
 const dependencies = [
     'react',
     'react-dom',
@@ -150,4 +152,4 @@ function doIt( name ) {
 
 }
 
-doIt(process.argv[2]);
+doIt(args[0]);
