@@ -102,7 +102,7 @@ Other npm init examples
    npm init component-app
    ```
 
-- create-hintrc - 💡 A hinting engine for the web https://webhint.io/
+- create-hintrc - 💡 A hinting engine for the web [https://webhint.io/](https://webhint.io/)
 
    ```bash
    npm init hintrc

@@ -36,6 +36,11 @@
     "validate-npm-package-name": "^3.0.0"
   },
   "devDependencies": {
+    "eslint": "^5.13.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.0",
+    "eslint-plugin-react": "^7.12.4",
     "release-it": "^10.0.7"
   }
 }

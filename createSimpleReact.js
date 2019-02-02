@@ -1,3 +1,5 @@
+/* eslint strict: ["error", "global"] */
+
 'use strict';
 
 const os = require('os');
@@ -8,175 +10,178 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const validProjectName = require('validate-npm-package-name');
 
-var pjson = require('./package.json');
+const args = require('minimist')(process.argv.slice(2), { boolean: true });
 
-const args = require('minimist')(process.argv.slice(2), {boolean:true});
+const pjson = require('./package.json');
 
 const dependencies = [
-    'react',
-    'react-dom',
-    'react-spring'
-    ].sort();
+  'react',
+  'react-dom',
+  'react-spring',
+].sort();
 
 const devDependencies = [
-    'webpack-dev-server',
-    'webpack webpack-cli',
-    '@babel/core',
-    '@babel/plugin-proposal-class-properties',
-    '@babel/preset-env',
-    '@babel/preset-react',
-    'babel-loader',
-    'css-loader',
-    'style-loader',
-    'opn-cli',
-    'eslint',
-    'eslint-config-airbnb',
-    'eslint-plugin-jsx-a11y',
-    'eslint-plugin-react',
-    'eslint-plugin-import@latest',
-    ].sort();
+  'webpack-dev-server',
+  'webpack webpack-cli',
+  '@babel/core',
+  '@babel/plugin-proposal-class-properties',
+  '@babel/preset-env',
+  '@babel/preset-react',
+  'babel-loader',
+  'css-loader',
+  'style-loader',
+  'opn-cli',
+  'eslint',
+  'eslint-config-airbnb',
+  'eslint-plugin-jsx-a11y',
+  'eslint-plugin-react',
+  'eslint-plugin-import@latest',
+].sort();
 
 const packageJson = {
-    "name": "appName",
-    "version": '0.1.0',
-    "private": true,
-    "description": "A Simple React Application",
-    "main": "index.js",
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {},
-    "devDependencies": {},
-    "scripts": {
-        "test": "jest",
-        "lint": "eslint src/**/*.js",
-        "start": "webpack-dev-server --mode development --hot",
-        "build": "cp src/index.html public/ && webpack --mode production",
-        "demo": "cd public && opn index.html"
-    }
+  name: 'appName',
+  version: '0.1.0',
+  private: true,
+  description: 'A Simple React Application',
+  main: 'index.js',
+  keywords: [],
+  author: '',
+  license: 'ISC',
+  dependencies: {},
+  devDependencies: {},
+  scripts: {
+    test: 'jest',
+    lint: 'eslint src/**/*.js',
+    start: 'webpack-dev-server --mode development --hot',
+    build: 'cp src/index.html public/ && webpack --mode production',
+    demo: 'cd public && opn index.html',
+  },
 };
 
 function checkAgainstDependancies(appName, depList) {
-    if (depList.indexOf(appName) >= 0) {
-        console.error(
-          chalk.red(
-            `We cannot create a project called ${chalk.green(
-              appName
-            )} because a dependency with the same name exists.\n` +
-              `Due to the way npm works, the following names are not allowed:\n\n`
-          ) +
-            chalk.cyan(depList.map(depName => `  ${depName}`).join('\n')) +
-            chalk.red('\n\nPlease choose a different project name.')
-        );
-        process.exit(1);
-      }
+  if (depList.indexOf(appName) >= 0) {
+    const msg = `
+We cannot create a project called ${chalk.green(appName)} because a dependency with the same name exists.
+Due to the way npm works, the following names are not allowed:\n\n`
+    console.error(chalk.red(msg)
+            + chalk.cyan(depList.map(depName => `  ${depName}`).join('\n'))
+            + chalk.red('\n\nPlease choose a different project name.'));
+    process.exit(1);
+  }
 }
 
 function printValidationResults(results) {
-    if (typeof results !== 'undefined') {
-      results.forEach(error => {
-        console.error(chalk.red(`  *  ${error}`));
-      });
-    }
+  if (typeof results !== 'undefined') {
+    results.forEach((error) => {
+      console.error(chalk.red(`  *  ${error}`));
+    });
+  }
 }
 
 function checkAppName(appName) {
-    const validationResult = validProjectName(appName);
-    if (!validationResult.validForNewPackages) {
-      console.error(
-        `Could not create a project called ${chalk.red(appName)} because of npm naming restrictions:`
-      );
-      printValidationResults(validationResult.errors);
-      printValidationResults(validationResult.warnings);
-      process.exit(1);
-    }
+  const validationResult = validProjectName(appName);
+  if (!validationResult.validForNewPackages) {
+    const err = `Could not create a project called ${chalk.red(appName)} because of npm naming restrictions:`
+    console.error(err);
+    printValidationResults(validationResult.errors);
+    printValidationResults(validationResult.warnings);
+    process.exit(1);
+  }
 
-    checkAgainstDependancies(appName, dependencies);
-    checkAgainstDependancies(appName, devDependencies);
+  checkAgainstDependancies(appName, dependencies);
+  checkAgainstDependancies(appName, devDependencies);
 }
 
-function padLeft(s, len, p=' ') {
-    return String(p.repeat(len) + s).slice(-len)
- }
+function padLeft(s, len, p = ' ') {
+  return String(p.repeat(len) + s).slice(-len)
+}
 
 function copyFiles(fromDir, toDir, verbose) {
-    let  files = fs.readdirSync(fromDir);
-    for (var i in files) {
-        let dest = files[i]
-        if (dest === 'gitignore')   // workaround .gitignore filtered out of npm commit
-           dest = '.gitignore'
-        const from = path.join(fromDir, files[i])
-        const to = path.join(toDir, dest)
-        if (verbose) {
-          const name = padLeft(dest, 18)
-          console.log(`${name} => ${toDir}`)
-        }
-        fs.copySync(from, to)
+  const files = fs.readdirSync(fromDir);
+  files.forEach((file) => {
+    // workaround .gitignore filtered out of npm commit
+    const dest = (file === 'gitignore') ? '.gitignore' : file
+    const from = path.join(fromDir, file)
+    const to = path.join(toDir, dest)
+    if (verbose) {
+      const name = padLeft(dest, 18)
+      console.log(`${name} => ${toDir}`)
     }
+    fs.copySync(from, to)
+  });
 }
 
 function npmInstall(save, depList) {
-    const command = [ 'npm',
-                'install',
-                save,
-        ].concat(depList).join(' ');
+  const command = ['npm',
+    'install',
+    save,
+  ].concat(depList).join(' ');
 
-    childProcess.execSync(command, {stdio: 'inherit'} );
+  childProcess.execSync(command, { stdio: 'inherit' });
 }
 
 function doIt(name, verbose, skip) {
-    const root = path.resolve(name);
-    const appName = path.basename(root);
+  const root = path.resolve(name);
+  const appName = path.basename(root);
 
-    checkAppName(appName);
+  checkAppName(appName);
 
-    fs.ensureDirSync(name);    // create directory if not there
+  // create directory if not there
+  fs.ensureDirSync(name);
 
-    console.log(`Creating a new React app in ${chalk.green(root)}.`);
-    console.log();
+  console.log(`Creating a new React app in ${chalk.green(root)}.`);
+  console.log();
 
-    fs.ensureDirSync(root+'/src');
-    fs.ensureDirSync(root+'/public');
-    fs.ensureDirSync(root+'/test');
+  fs.ensureDirSync(`${root}/src`);
+  fs.ensureDirSync(`${root}/public`);
+  fs.ensureDirSync(`${root}/test`);
 
-    packageJson.name = appName
-    packageJson.author = os.userInfo().username
-    fs.writeFileSync(
-      path.join(root, 'package.json'),
-      JSON.stringify(packageJson, null, 2) + os.EOL
-    );
+  packageJson.name = appName
+  packageJson.author = os.userInfo().username
+  fs.writeFileSync(
+    path.join(root, 'package.json'),
+    JSON.stringify(packageJson, null, 2) + os.EOL,
+  );
 
-    let fromDir = path.join(__dirname, 'template')
-    let toDir = path.join(root)
-    copyFiles(fromDir, toDir, verbose)
+  let fromDir = path.join(__dirname, 'template')
+  let toDir = path.join(root)
+  copyFiles(fromDir, toDir, verbose)
 
-    fromDir = path.join(__dirname, 'template', 'src')
-    toDir = path.join(root, 'src')
-    copyFiles(fromDir, toDir, verbose)
+  fromDir = path.join(__dirname, 'template', 'src')
+  toDir = path.join(root, 'src')
+  copyFiles(fromDir, toDir, verbose)
+  process.chdir(root);
+  if (!skip) {
+    npmInstall('--save', dependencies);
+    npmInstall('--save-dev', devDependencies);
 
-    process.chdir(root);
-    if (!skip) {
-      npmInstall('--save', dependencies);
-      npmInstall('--save-dev', devDependencies);
-
-      if (!fs.existsSync(path.join(root, '.git'))) {
-        console.log(`${chalk.green('Initializing Git repo for this driectory.')}.`);
-        childProcess.execSync('git init', {stdio: 'inherit'} );
-      }
+    if (!fs.existsSync(path.join(root, '.git'))) {
+      console.log(`${chalk.green('Initializing Git repo for this driectory.')}.`);
+      childProcess.execSync('git init', { stdio: 'inherit' });
     }
+  }
 }
 
-const newDir = args._[0]   // first non-switch argument
-if (newDir)
-    doIt(newDir, args.verbose, args.skip);
-  else
-    console.log(chalk.red('No directory specified.'));
+console.log(`create-simple-react ${pjson.version}`)
+
+const newDir = args._[0] // first non-switch argument
+if (newDir) {
+  doIt(newDir, args.verbose, args.skip);
+} else {
+  console.log(chalk.red('No directory specified.'));
+}
 
 if (!newDir || args.help) {
-    console.log(`create-simple-react ${pjson.version}`);
-    console.log(`${chalk.blue('How to use:')} npm init simple-react [your new directory] {options}`);
-    console.log(`    ${chalk.green('--verbose')}  show as files copied into new project. `);
-    console.log(`    ${chalk.green('--skip')}     skip the npm installs`);
-    console.log(`    ${chalk.green('--help')}     display how to use`);
-  }
+  console.log(`${chalk.blue('How to use:')} npm init simple-react [your new directory] {options}`)
+  console.log(`    ${chalk.green('--verbose')}  show as files copied into new project. `)
+  console.log(`    ${chalk.green('--skip')}     skip the npm installs`)
+  console.log(`    ${chalk.green('--help')}     display how to use`)
+}
 
+if (newDir) {
+  console.log('');
+  console.log('We suggest that you begin with your new project by typing:');
+  console.log(`   cd ${newDir}`);
+  console.log('   npm start');
+  console.log(`      (then browse to ${chalk.green('http://localhost:8080')}) `);
+}

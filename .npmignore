@@ -1,3 +1,5 @@
 docs/*
 node_modules/*
 *.sh
+.eslintrc.js
+make-example.sh
