@@ -100,7 +100,13 @@ function copyFiles(fromDir, toDir, verbose) {
   const files = fs.readdirSync(fromDir);
   files.forEach((file) => {
     // workaround .gitignore filtered out of npm commit
-    const dest = (file === 'gitignore') ? '.gitignore' : file
+    let dest = file
+    if (file === 'gitignore')
+      dest = '.gitignore'
+
+    if (file === 'eslintrc.js')
+      dest = '.eslintrc.js'
+
     const from = path.join(fromDir, file)
     const to = path.join(toDir, dest)
     if (verbose) {
