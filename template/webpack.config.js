@@ -5,11 +5,12 @@ function resolve (dir) {
 }
 
 module.exports = {
-  entry: './src/index.js',
+  entry: ['@babel/polyfill', './src/index.js'],
   output: {
         path: resolve('./public/'),
         filename: 'bundle.js'
     },
+  devtool: 'source-map',
   resolve:{
     modules: [
     resolve('src'),
@@ -28,9 +29,9 @@ module.exports = {
             test: /^(?!.*\.{test,min}\.js$).*\.js$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
-            query: {
-              presets: ['@babel/preset-env', '@babel/preset-react']
-                   },
+            options: {
+              configFile: './babel.config.js'
+            }
           },
 
           {
