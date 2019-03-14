@@ -1,0 +1,32 @@
+{
+  "name": "server-for-infinite-scroller",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinjackson/unknown.git"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "author": "Martin Jackson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martinjackson/simple-server/issues"
+  },
+  "homepage": "https://github.com/martinjackson/simple-server#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "node-fetch": "^2.3.0",
+    "serve-index": "^1.9.1",
+    "unsplash-js": "^5.0.0"
+  }
+}
