@@ -45,6 +45,8 @@ function checkAppName(appName) {
     process.exit(1);
   }
 
+  const dependencies = Object.keys(packageJson.dependencies);
+  const devDependencies = Object.keys(packageJson.devDependencies);
   checkAgainstDependancies(appName, dependencies);
   checkAgainstDependancies(appName, devDependencies);
 }
@@ -109,8 +111,13 @@ function doIt(name, verbose, skip) {
   );
 
   process.chdir(root);
+  if (!fs.existsSync(path.join(root, 'package-lock.json'))) {
+    console.log(`${chalk.green('npm install')} in ${root}.`);
+    childProcess.execSync('npm install', { stdio: 'inherit' });
+  }
+
   if (!fs.existsSync(path.join(root, '.git'))) {
-    console.log(`${chalk.green('Initializing Git repo for this driectory.')}.`);
+    console.log(`${chalk.green('Initializing Git repo')} for ${root}.`);
     childProcess.execSync('git init', { stdio: 'inherit' });
   }
 
@@ -135,7 +142,6 @@ if (newDir) {
   console.log('');
   console.log('We suggest that you begin with your new project by typing:');
   console.log(`   cd ${newDir}`);
-  console.log('   npm update --or--  yarn upgrade ');
   console.log('   npm start  --or--  yarn start   ');
   console.log(`      (then browse to ${chalk.green('http://localhost:8080')}) `);
 }
