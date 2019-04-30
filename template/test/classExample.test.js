@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import TestUtils from 'react-dom/test-utils';
-import Example from '../src/Example.js'
+import ClassExample from '../src/ClassExample.js'
 
 function findReactById(tree, id) {
   return TestUtils.findAllInRenderedTree(tree, function(inst) {
@@ -15,10 +15,10 @@ function findDomById(tree, id) {
   return domNode
 }
 
-describe('Example', function () {
+describe('ClassExample', function () {
 
   it('should render', function () {
-      var tree = TestUtils.renderIntoDocument(<Example />);
+      var tree = TestUtils.renderIntoDocument(<ClassExample />);
       expect(tree).not.toBeNull();
   });
 
