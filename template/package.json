@@ -34,7 +34,7 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint src/**/*.js",
-    "start": "webpack-dev-server --mode development --hot",
+    "start": "webpack-dev-server --mode development --hot --colors  | grep -v built",
     "build": "cp src/index.html public/ && webpack --mode production",
     "demo": "cd public && opn index.html"
   }

@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test-template": "rm -Rf hello && node createSimpleReact.js hello",
     "dry-run": "release-it --dry-run -n",
     "release": "release-it"
   },
