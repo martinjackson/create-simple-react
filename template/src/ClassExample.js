@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-// eslint-disable-next-line react/prefer-stateless-function
-export default class ClassExample extends React.Component {
+export default class ClassExample extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { from: "..." };
+    this.updateWho = this.updateWho.bind(this);
+  }
+
+  updateWho() {
+    this.setState({from: "React"});
+  }
+
+  componentDidMount() {
+    setTimeout(() => this.updateWho(), 3000);
+  }
+
   render() {
     const st = {
       width: '100%',
@@ -11,7 +26,8 @@ export default class ClassExample extends React.Component {
     }
 
     return (
-      <div style={st}>Hello</div>
+      <div style={st}>Hello from {this.state.from}</div>
     );
   }
 }
+
