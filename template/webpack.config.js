@@ -4,8 +4,13 @@ function resolve (dir) {
     return path.join(__dirname, dir)
 }
 
+//   entry: ['@babel/polyfill', './src/index.js'],
+// instead of @babel/polyfill
+require("core-js/stable");
+require("regenerator-runtime/runtime");
+
 module.exports = {
-  entry: ['@babel/polyfill', './src/index.js'],
+  entry: ['./src/index.js'],
   output: {
         path: resolve('./public/'),
         filename: 'bundle.js'
