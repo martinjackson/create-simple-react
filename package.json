@@ -1,6 +1,6 @@
 {
   "name": "create-simple-react",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "alternative to create-react-app / no eject, Keep It Simple, opinionated for shop standard",
   "main": "index.js",
   "bin": {
