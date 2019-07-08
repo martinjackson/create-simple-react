@@ -21,7 +21,7 @@
     "project",
     "react",
     "babel",
-    "wepback",
+    "webpack",
     "KISS"
   ],
   "author": "Martin A. Jackson",
