@@ -1,25 +1,27 @@
 import React, {useState, useEffect} from "react";
 
-const HookExample = (props) => {
+// don't go outside the index of array
+const bound = (i, arr) => {
+  const max = (arr) ?  arr.length-1 : 0
+  return (i < 0) ? 0 : (i > max) ? max : i
+}
+
+
+const RecordView = (props) => {
   const [index, setIndex] = useState(props.index || 4)
   const [people, setPeople] = useState();
   const [msg, setMsg] = useState('Loading...');
   const url = props.url || 'https://jsonplaceholder.typicode.com/users';
 
-  const willUpdate = () => {
+  const update = () => {
     fetch(url)
     .then(results => results.json() )
     .then(data => { setPeople(data) })
     .catch(err => { setMsg(err.message) })
   }
 
-  // like componentDidMount(), willUpdate() only called when [url] changes
-  useEffect(willUpdate, [url])
-
-  const bound = (i, arr) => {  // dont go outside the index of array
-    const max = (arr) ?  arr.length-1 : 0
-    return (i < 0) ? 0 : (i > max) ? max : i
-  }
+  // like componentDidMount(), update() only called when [url] changes
+  useEffect(update, [url])
 
   const click = (e) => {
     e.preventDefault()
@@ -37,21 +39,26 @@ const HookExample = (props) => {
     const addr = `${person.address.street}, ${person.address.suite},
                   ${person.address.city} ${person.address.zipcode}`
     const geo = `${person.address.geo.lat} ${person.address.geo.lng}`
-    return (<div>
-      <strong>Record:</strong> {index+1}<br/>
-      <strong>name:</strong> {person.name} <br/>
-      <strong>email:</strong> {person.email} <br/>
-      <strong>address:</strong> {addr} <br/>
-      <strong>geo:</strong> {geo} <br/>
-      <Button jumpBack5>&#8647;</Button>
-      <Button dec>Prev</Button>
-      <Button inc>Next</Button>
-      <Button jumpAhead5>&#8649;</Button>
-    </div>)
+
+    const ss = { fontSize: 'xx-large' }
+    return <div style={props.style}>
+              <div>
+                <span style={ss}>Record View (React Hooks and fetch Web API) </span><br/><br/>
+                <strong>Record:</strong> {index+1}<br/>
+                <strong>name:</strong> {person.name} <br/>
+                <strong>email:</strong> {person.email} <br/>
+                <strong>address:</strong> {addr} <br/>
+                <strong>geo:</strong> {geo} <br/>
+                <Button jumpBack5>&#8647;</Button>
+                <Button dec>Prev</Button>
+                <Button inc>Next</Button>
+                <Button jumpAhead5>&#8649;</Button>
+              </div>
+    </div>
   }
 
   // functional return instead of render()
   return (people) ? displayRecord(index) : (<div>{msg}</div>)
 };
 
-export default HookExample
+export default RecordView
