@@ -3,9 +3,11 @@
 An alternative to create-react-app, no eject, opinionated for a shop standard.
 
 There is no ejecting !!  for those you want to tinker, the config files
-are in the root directory with the package.json file.  If you mess them up,
-you can run create-simple-react on the same directory and it will restore
+are in the root directory with the package.json file.  If you mess them up, you have two choices:
+- use git to revert back
+- remove the messed up files and  run create-simple-react on the same directory again. It will restore
 the original config files.
+Note: create-simple-react will not replace existing files
 
 This project was ruled by three concepts:
 
@@ -13,10 +15,15 @@ This project was ruled by three concepts:
 2. D.R.Y. -- Don't Repeat Yourself
 3. Everything in plain sight
 
+Please send ideas on improvements
+
+Version 0.6.1    Example code for both React Class and React Hooks (Jest test examples too!)
+
+
 ## How to use
 
 ```bash
-npm init simple-react [New Project Directory]
+npm init simple-react [New Project Directory] {--verbose} {--help}
 ```
 
 ### Example
@@ -78,6 +85,7 @@ npm start
 |   src/index.js     | Top App Module |
 |   src/Example.js   | An example React Component used by index.js |
 |   test             | directory for your Jest unit tests |
+|   server           | an example NodeJS server as a backend for your React frontEnd |
 
 ## Further Study
 
