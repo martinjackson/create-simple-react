@@ -8,6 +8,7 @@
   "author": "mjackson",
   "license": "ISC",
   "dependencies": {
+    "file-loader": "^5.1.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-spring": "^8.0.27"
@@ -38,6 +39,6 @@
     "lint": "eslint src/**/*.js",
     "start": "webpack-dev-server --mode development --hot --colors  | grep -v built",
     "build": "cp src/index.html public/ && webpack --mode production",
-    "demo": "cd public && open index.html"
+    "demo": "cd public && open-cli index.html"
   }
 }
