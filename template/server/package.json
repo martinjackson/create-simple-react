@@ -27,6 +27,6 @@
     "express": "^4.16.4",
     "node-fetch": "^2.3.0",
     "serve-index": "^1.9.1",
-    "unsplash-js": "^5.0.0"
+    "unsplash-js": "^6.2.0"
   }
 }
