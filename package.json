@@ -1,6 +1,6 @@
 {
   "name": "create-simple-react",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "alternative to create-react-app / no eject, Keep It Simple, opinionated for shop standard",
   "main": "index.js",
   "bin": {
@@ -41,6 +41,7 @@
     "eslint-config-airbnb": "^18.2.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-react": "^7.20.6"
+    "eslint-plugin-react": "^7.20.6",
+    "release-it": "^14.0.3"
   }
 }
