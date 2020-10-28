@@ -1,8 +1,7 @@
 # Build Systems #
 .cache
 node_modules
-bin
-package-lock.json
+public/assets
 
 # Packages #
 ################################################################################
