@@ -7,7 +7,8 @@
     "create-simple-react": "./index.js"
   },
   "scripts": {
-    "test": "node index.js bob --verbose",
+    "test": "rm -Rf bob ; node index.js bob ",
+    "test-verbose": "rm -Rf bob ; node index.js bob --verbose",
     "test-template": "rm -Rf hello && node createSimpleReact.js hello",
     "dry-run": "release-it --dry-run -n",
     "release": "release-it"
