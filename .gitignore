@@ -2,7 +2,6 @@
 .cache
 node_modules
 bin
-package-lock.json
 hello
 
 # Packages #
