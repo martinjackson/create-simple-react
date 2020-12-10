@@ -1,7 +1,5 @@
-const os = require('os');
 const path = require('path');
-const dns = require('dns');
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 const CONSTANTS = require('./constants');
 
@@ -23,8 +21,18 @@ let info = {
 
   mode: 'development',
   devtool: 'source-map',
+
   watchOptions: {
     ignored: /node_modules/
+  },
+
+  devServer: {
+    historyApiFallback: { index: 'public/index.html' },
+    publicPath: "/assets/",   // where in-memory webpack output is served from instead of files
+    contentBase: path.resolve(__dirname, 'public'),   // all other content is served from files here
+    port: HOT_PORT,
+    host: '0.0.0.0',     // allow more than localhost
+    proxy: {  '/api/*': `http://localhost:${API_PORT}`,  },   // <- backend
   },
 
   stats: 'minimal',     // 'errors-only', default 'normal'
@@ -86,17 +94,9 @@ let info = {
     // new BundleAnalyzerPlugin()       // uncomment if you want to see graphs of sizes, runs continually
   ],
 
-  devServer: {
-    historyApiFallback: { index: 'public/index.html' },
-    publicPath: "/assets/",   // where in-memory webpack output is served from instead of files
-    contentBase: path.resolve(__dirname, 'public'),   // all other content is served from files here
-    port: HOT_PORT,
-    host: '0.0.0.0',     // allow more than localhost
-    proxy: {  '/api/*': `http://localhost:${API_PORT}`,  }   // <- backend
-  }
 };
 
-async function configInfo() {
+function configInfo() {
     console.log('');
     console.log('**********************************');
     console.log('* if running hotloader use ');
