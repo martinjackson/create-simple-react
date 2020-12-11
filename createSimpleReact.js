@@ -10,7 +10,7 @@ const chalk = require('chalk');
 const fse = require('fs-extra');
 const args = require('minimist')(process.argv.slice(2), { boolean: true });
 
-const { copyFiles } = require("./copyFiles");
+const { copyFiles, mkdir, logRed, logGreen, logErrorAndStop } = require("./copyFiles");
 
 const pJson = require('./package.json');
 
@@ -39,20 +39,19 @@ function createPackageJson(where, cmds, info) {
   }
 }
 
+
 function doIt(name, verbose, skip) {
   const root = path.resolve(name);
   const appName = path.basename(root);
 
-  // create directory if not there
-  fse.ensureDirSync(name);
-
   console.log(`Creating a new React app in ${chalk.green(root)}.`);
   console.log();
 
-  fse.ensureDirSync(`${root}/src`);
-  fse.ensureDirSync(`${root}/public`);
-  fse.ensureDirSync(`${root}/test`);
-  fse.ensureDirSync(`${root}/server`);
+  mkdir(`${root}/`)
+  mkdir(`${root}/src`);
+  mkdir(`${root}/public`);
+  mkdir(`${root}/test`);
+  mkdir(`${root}/server`);
 
   copyFiles(root, null, verbose)
   copyFiles(root, 'src', verbose)
@@ -120,25 +119,36 @@ function doIt(name, verbose, skip) {
 
 }
 
-console.log(`create-simple-react ${pJson.version}`)
+
+// Main script
+
+console.log(`create-simple-react ${pJson.version}, NodeJS ${process.versions.node}`)
+
+const NODE_MAJOR_VERSION = process.versions.node.split('.')[0];
+if (NODE_MAJOR_VERSION < 10) {
+  logRed('Requires Node 10.x (or higher)');
+  logGreen('Better performance with Node 14.x, npm 7.x');
+  process.exit(-1);
+}
 
 const newDir = args._[0] // first non-switch argument
-if (newDir) {
-  doIt(newDir, args.verbose, args.skip);
+if (!newDir) {
+  if (args.help) {
+    console.log(`${chalk.blue('How to use:')} npm init simple-react [your new directory] {options}`)
+    console.log(`    ${chalk.green('--verbose')}  show as files copied into new project. `)
+    console.log(`    ${chalk.green('--help')}     display how to use`)
+    process.exit(0)
+  } else {
+    console.log(chalk.red('No directory specified.'));
+    process.exit(-1)
+  }
 } else {
-  console.log(chalk.red('No directory specified.'));
-}
-
-if (!newDir || args.help) {
-  console.log(`${chalk.blue('How to use:')} npm init simple-react [your new directory] {options}`)
-  console.log(`    ${chalk.green('--verbose')}  show as files copied into new project. `)
-  console.log(`    ${chalk.green('--help')}     display how to use`)
-}
-
-if (newDir) {
+  doIt(newDir, args.verbose, args.skip);
   console.log('');
   console.log('You can now begin working with your new project by typing:');
   console.log(`   cd ${newDir}`);
   console.log('   npm start  --or--  yarn start   ');
   console.log(`      (then browse to ${chalk.green('http://localhost:8080')}) `);
 }
+
+

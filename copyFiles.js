@@ -12,6 +12,13 @@ function logGreen(msg) {
   console.log(`${chalk.green(msg)}`);
 }
 
+function logErrorAndStop(msg, err) {
+  logRed(msg);
+  console.error(err)
+  console.log();
+  process.exit(-1)
+}
+
 function padLeft(s, len, p = ' ') {
   return String(p.repeat(len) + s).slice(-len);
 }
@@ -38,6 +45,16 @@ function filePrep(verbose, file, dest, fromDir, toDir) {
   return [fromFile, toFile, shouldCopy];  // not a dir and does not exist
 }
 
+function mkdir(name) {
+  try {
+      // create directory if not there
+      fse.ensureDirSync(name);
+
+      } catch (err) {
+        logErrorAndStop(`Error creating directoy ${name}.`, err);
+      }
+}
+
 function copyFiles(root, toSubDir, verbose) {
   let fromDir = (toSubDir) ? path.join(__dirname, 'template', toSubDir) : path.join(__dirname, 'template');
   let toDir = (toSubDir) ? path.join(root, toSubDir) : path.join(root);
@@ -53,9 +70,19 @@ function copyFiles(root, toSubDir, verbose) {
     const [fromFile, toFile, shouldCopy] = filePrep(verbose, file, dest, fromDir, toDir);
 
     // default  , { overwrite:true } )
-    if (shouldCopy)
-       fse.copySync(fromFile, toFile);
+    if (shouldCopy) {
+      try {
+        fse.copySync(fromFile, toFile);
+      } catch (err) {
+        logErrorAndStop(`Error copying file ${toFile}.`, err);
+      }
+    }
+
   });
 }
 
+exports.mkdir = mkdir;
 exports.copyFiles = copyFiles;
+exports.logErrorAndStop = logErrorAndStop;
+exports.logRed = logRed;
+exports.logGreen = logGreen;
