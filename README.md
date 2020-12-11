@@ -2,22 +2,37 @@
 
 An alternative to create-react-app, no eject, opinionated for a shop standard.
 
+_Would you like a feature comparision between this project and React's create-react-app?_
+
 There is no ejecting !!  for those you want to tinker, the config files
 are in the root directory with the package.json file.  If you mess them up, you have two choices:
 - use git to revert back
 - remove the messed up files and  run create-simple-react on the same directory again. It will restore
 the original config files.
-Note: create-simple-react will not replace existing files
+_Note: create-simple-react will not replace existing files_
 
-This project was ruled by three concepts:
+This project was ruled by these concepts:
 
 1. K.I.S.S. -- Keep It Sublimely Simple
 2. D.R.Y. -- Don't Repeat Yourself
 3. Everything in plain sight
+4. React Frontend, NodeJS backend example
+5. Project structure near ready for Production (just change webpack config from development to production, add minifiy)
 
-Please send ideas on improvements
+__Please send ideas on improvements__
 
 Version 0.6.1    Example code for both React Class and React Hooks (Jest test examples too!)
+Version 0.9.0    Upgraded to Webpack 5
+Version 0.10.0   Tested with older version of NodeJS
+
+## Minimum requirements
+
+NodeJS  10.x -> 14.15.1
+
+- send email to martin.a.jackson@gmail.com on earlier or later versions mention  your platform
+  - Ubuntu 18.04, 20.04, RaspberryPi 3/4, Mac OS, Win10 1803/1909
+  - we will put the list here
+
 
 
 ## How to use
