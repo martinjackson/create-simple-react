@@ -11,7 +11,7 @@
     "test-verbose": "rm -Rf bob ; node index.js bob --verbose",
     "test-template": "rm -Rf hello && node createSimpleReact.js hello",
     "dry-run": "release-it --dry-run -n",
-    "release": "release-it"
+    "pub": "release-it"
   },
   "repository": {
     "type": "git",
@@ -38,11 +38,11 @@
     "validate-npm-package-name": "^3.0.0"
   },
   "devDependencies": {
-    "eslint": "^7.13.0",
+    "eslint": "^7.15.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
-    "release-it": "^14.2.1"
+    "release-it": "^14.2.2"
   }
 }
