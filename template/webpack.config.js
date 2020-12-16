@@ -27,7 +27,8 @@ let info = {
   },
 
   devServer: {
-    historyApiFallback: { index: 'public/index.html' },
+    historyApiFallback: true,       // react-router says to do this (works!)
+    // historyApiFallback: { index: 'public/index.html' },  Early Webpack 5 said to do this
     publicPath: "/assets/",   // where in-memory webpack output is served from instead of files
     contentBase: path.resolve(__dirname, 'public'),   // all other content is served from files here
     port: HOT_PORT,
