@@ -3,13 +3,15 @@ const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
 
-const chalk = require('chalk');
+// const chalk = require('chalk');      ESM only
+const asci = require('ansi-colors');
+ 
 
 function logRed(msg) {
-  console.log(`${chalk.red(msg)}`);
+  console.log(`${asci.red(msg)}`);
 }
 function logGreen(msg) {
-  console.log(`${chalk.green(msg)}`);
+  console.log(`${asci.green(msg)}`);
 }
 
 function logErrorAndStop(msg, err) {
@@ -62,6 +64,8 @@ function copyFiles(root, toSubDir, verbose) {
   files.forEach((file) => {
     // workaround .gitignore filtered out of npm commit
     let dest = file;
+    if (file === 'env')
+      dest = '.env';
     if (file === 'gitignore')
       dest = '.gitignore';
     if (file === 'eslintrc.js')

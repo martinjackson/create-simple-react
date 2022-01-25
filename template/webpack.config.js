@@ -1,76 +1,55 @@
-const path = require('path');
-// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
-const CONSTANTS = require('./constants');
+const fs = require('fs')
+const os = require('os')
+const path = require('path')
+const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-// instead of @babel/polyfill
-// require("core-js/stable");
-// require("regenerator-runtime/runtime");
+const dot = require('dotenv')
+dot.config({ path: './.env' })
 
-require('dotenv').config()
-const HOT_PORT = process.env.HOT_PORT || CONSTANTS.DEF_HOT_PORT
-const API_PORT = process.env.API_PORT || CONSTANTS.DEF_API_PORT
+// Take the constants from the .env file and make them available as process.env.NAME
 
+const HOSTNAME = process.env.HOSTNAME
+const HOT_PORT = process.env.HOT_PORT
+const API_PORT = process.env.API_PORT
 
 let info = {
-  entry: {main: './src/index.js'},
+  entry: {pre: './src/initEnv.js',
+          main: './src/index.js'},
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'public', 'assets'),  // where webpack bundles are built
+    path: path.resolve(__dirname, 'public', 'dist'),  // where webpack bundles are built
+    clean: true,
+    publicPath: '/dist/'
   },
 
   mode: 'development',
   devtool: 'source-map',
-
-  watchOptions: {
-    ignored: /node_modules/
-  },
-
-  devServer: {
-    historyApiFallback: true,       // react-router says to do this (works!)
-    // historyApiFallback: { index: 'public/index.html' },  Early Webpack 5 said to do this
-    publicPath: "/assets/",   // where in-memory webpack output is served from instead of files
-    contentBase: path.resolve(__dirname, 'public'),   // all other content is served from files here
-    port: HOT_PORT,
-    host: '0.0.0.0',     // allow more than localhost
-    proxy: {  '/api/*': `http://localhost:${API_PORT}`,  },   // <- backend
-  },
-
   stats: 'minimal',     // 'errors-only', default 'normal'
-
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendor",
-          chunks: "initial",
-        },
-      },
-    },
-  },
 
   module: {
     rules: [
       {
         test: /\.(scss|css)$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
-
       {
-        test: /\.jsx?$/,
-        include: path.resolve(__dirname, 'src'),
+        test: /\.(js|jsx)$/,
+        exclude: [ /node_modules/ ],
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
+            presets: [
+                        '@babel/preset-env',
+                        '@babel/preset-react'
+            ],
             plugins: [
-              '@babel/plugin-proposal-object-rest-spread',
-              [ "@babel/plugin-proposal-class-properties", {"loose": true} ]
+                       '@babel/plugin-proposal-object-rest-spread',
+                       '@babel/plugin-proposal-optional-chaining',
+                       ["@babel/plugin-proposal-class-properties", {"loose": true} ],
+                       ["@babel/plugin-proposal-private-methods", { "loose": true }],
+                       ["@babel/plugin-proposal-private-property-in-object", { "loose": true }]
             ]
           }
         }
@@ -86,25 +65,78 @@ let info = {
       {
         test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
         type: 'asset/inline',
-      },
-
+      }
     ],
   },
 
   plugins: [
-    // new BundleAnalyzerPlugin()       // uncomment if you want to see graphs of sizes, runs continually
+      new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
+
+    new webpack.ProvidePlugin({
+      process: 'process/browser',     // requires npm install process --save-dev
+    }),
+
+    new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // all options are optional
+        filename: '[name].css',
+        chunkFilename: '[id].css',
+        ignoreOrder: false, // Enable to remove warnings about conflicting order
+      }),
+
   ],
 
+  resolve: {
+    alias: {
+        react: path.resolve('./node_modules/react'),
+    },
+
+      fallback: {
+          "stream": require.resolve("stream-browserify"),
+          "zlib": require.resolve("browserify-zlib"),
+          "assert": require.resolve("assert/")
+        }
+  },
+
+  devServer: {
+    server: {
+      type: 'https',
+      options: {
+        key: fs.readFileSync(`/opt/Certs/${HOSTNAME}.key`),       
+        cert: fs.readFileSync(`/opt/Certs/${HOSTNAME}.cer`),
+        // ca: fs.readFileSync(`/opt/Certs/${HOSTNAME}.ca`),  
+      },
+    },
+    historyApiFallback: true,
+    liveReload: true,
+    hot: true,
+
+    static: {
+        directory: path.resolve(__dirname, 'public'),
+        publicPath: '/',
+        watch: true
+    },
+
+    port: HOT_PORT,
+    allowedHosts: 'all',
+
+    proxy: {  '/api/*': `https://localhost:${API_PORT}`,  }   // <- backend
+  }
 };
 
-function configInfo() {
+async function configInfo() {
     console.log('');
-    console.log('**********************************');
-    console.log('* if running hotloader use ');
-    console.log(`*      http://localhost:${info.devServer.port}  `);
-    console.log('*  expect API services on  ');
-    console.log(`*      http://localhost:${API_PORT}  `);
-    console.log('**********************************');
+    console.log('*****************************************');
+    console.log('* if running   npm start   use           ');
+    console.log(`*      https://localhost:${HOT_PORT}          (VSCode port forwarding)`);
+    console.log(`*      https://${HOSTNAME}:${HOT_PORT}   `);
+    console.log('*  expect API services on                ');
+    console.log(`*      https://localhost:${API_PORT}          (VSCode port forwarding)`);
+    console.log(`*      https://${HOSTNAME}:${API_PORT}   `);
+    console.log('*****************************************');
+    console.log('')
 
   return info
 }

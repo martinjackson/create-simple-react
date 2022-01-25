@@ -6,7 +6,9 @@ const os = require('os');
 const path = require('path');
 const childProcess = require('child_process');
 
-const chalk = require('chalk');
+// const chalk = require('chalk');      ESM only
+const asci = require('ansi-colors');
+ 
 const fse = require('fs-extra');
 const args = require('minimist')(process.argv.slice(2), { boolean: true });
 
@@ -15,7 +17,7 @@ const { copyFiles, mkdir, logRed, logGreen, logErrorAndStop } = require("./copyF
 const pJson = require('./package.json');
 
 function createPackageJson(where, cmds, info) {
-  console.log(`working in ${chalk.yellow(where)}`);
+  console.log(`working in ${asci.yellow(where)}`);
   process.chdir(where);
 
   const newProjectJson = path.join(where, 'package.json')
@@ -25,7 +27,7 @@ function createPackageJson(where, cmds, info) {
       cmd = cmd.replace(/(\r\n|\n|\r)/gm, '');
       cmd = cmd.replace(/  +/g, ' ');  // renive redundant spaces
 
-      console.log(`${chalk.green(cmd)}`);
+      console.log(`${asci.green(cmd)}`);
       const stdout = childProcess.execSync(cmd+' 2>&1');   // TODO: redirect stderr to a string
     })
     console.log('');
@@ -44,7 +46,7 @@ function doIt(name, verbose, skip) {
   const root = path.resolve(name);
   const appName = path.basename(root);
 
-  console.log(`Creating a new React app in ${chalk.green(root)}.`);
+  console.log(`Creating a new React app in ${asci.green(root)}.`);
   console.log();
 
   mkdir(`${root}/`)
@@ -62,21 +64,25 @@ function doIt(name, verbose, skip) {
   const createPackageJsonCMDs = [
     'npm init -y',
     `npm install --save-dev
-    @babel/core
     @babel/plugin-proposal-class-properties
     @babel/plugin-proposal-object-rest-spread
+    @babel/plugin-proposal-optional-chaining
+    @babel/plugin-proposal-private-methods
+    @babel/plugin-proposal-private-property-in-object
     @babel/preset-env
     @babel/preset-react
     babel-loader
-    core-js
-    css-loader
-    regenerator-runtime
+    mini-css-extract-plugin
+    css-loader    
     sass
     sass-loader
-    style-loader
+    assert
+    stream-browserify
+    browserify-zlib
+    process
     webpack
-    webpack-bundle-analyzer
     webpack-cli
+    webpack-dev-middleware
     webpack-dev-server`,
 
     'npm install --save react react-dom dotenv'
@@ -84,11 +90,15 @@ function doIt(name, verbose, skip) {
 
   const projectScripts = {
     main: "index.js",
-    scripts: {
-      "start": "webpack serve",
-      "watch": "webpack --watch",
-      "build": "webpack"
-    }
+    "scripts": {
+      "test": "jest",
+      "lint": "eslint src/**/*.js",
+      "prep": "node watch-env.js",
+      "start": "sudo npm run back && sudo npm run front",
+      "front": "node watch-env.js --watch & HOSTNAME=$(hostname --fqdn) webpack serve",
+      "back": "cd server && ./start.sh",
+      "build": "node watch-env.js && HOSTNAME=$(hostname --fqdn) webpack"
+    },
   }
 
   const createServerPackageJsonCMDs = [
@@ -108,12 +118,12 @@ function doIt(name, verbose, skip) {
   createPackageJson(serverPath, createServerPackageJsonCMDs, serverScripts)
 
   if (!fse.existsSync(path.join(root, 'package-lock.json'))) {
-    console.log(`${chalk.green('npm install')} in ${root}.`);
+    console.log(`${asci.green('npm install')} in ${root}.`);
     childProcess.execSync('npm install', { stdio: 'inherit' });
   }
 
   if (!fse.existsSync(path.join(root, '.git'))) {
-    console.log(`${chalk.green('Initializing local Git info')} for ${root}.`);
+    console.log(`${asci.green('Initializing local Git info')} for ${root}.`);
     childProcess.execSync('git init', { stdio: 'inherit' });
   }
 
@@ -134,12 +144,12 @@ if (NODE_MAJOR_VERSION < 10) {
 const newDir = args._[0] // first non-switch argument
 if (!newDir) {
   if (args.help) {
-    console.log(`${chalk.blue('How to use:')} npm init simple-react [your new directory] {options}`)
-    console.log(`    ${chalk.green('--verbose')}  show as files copied into new project. `)
-    console.log(`    ${chalk.green('--help')}     display how to use`)
+    console.log(`${asci.blue('How to use:')} npm init simple-react [your new directory] {options}`)
+    console.log(`    ${asci.green('--verbose')}  show as files copied into new project. `)
+    console.log(`    ${asci.green('--help')}     display how to use`)
     process.exit(0)
   } else {
-    console.log(chalk.red('No directory specified.'));
+    console.log(asci.red('No directory specified.'));
     process.exit(-1)
   }
 } else {
@@ -148,7 +158,7 @@ if (!newDir) {
   console.log('You can now begin working with your new project by typing:');
   console.log(`   cd ${newDir}`);
   console.log('   npm start  --or--  yarn start   ');
-  console.log(`      (then browse to ${chalk.green('http://localhost:8080')}) `);
+  console.log(`      (then browse to ${asci.green('http://localhost:8080')}) `);
 }
 
 

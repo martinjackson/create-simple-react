@@ -20,7 +20,7 @@ class ExampleClass extends Component {
 
     const sd = {...this.props.style, background: 'green', color: 'white'};
     const ss = { maxWidth: '50%', fontSize: 'xx-large' }
-    return <div style={sd}>
+    return <div style={sd} className={this.props.className}>
               <span style={ss}>Hello from {this.state.from}</span>
            </div>;
 

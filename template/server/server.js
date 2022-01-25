@@ -3,12 +3,11 @@ const fs = require('fs');
 const express = require('express');
 const serveIndex = require('serve-index');
 
-const CONSTANTS = require('../constants');
 const apiHello = require('./api-hello')
 
-require('dotenv').config()
-const HOT_PORT = process.env.HOT_PORT || CONSTANTS.DEF_HOT_PORT
-const API_PORT = process.env.API_PORT || CONSTANTS.DEF_API_PORT
+require('dotenv').config({path:'../.env'})
+const HOT_PORT = process.env.HOT_PORT || 8080
+const API_PORT = process.env.API_PORT || 9000
 
 const app = express();
 app.get('/api/hello', apiHello);

@@ -10,7 +10,7 @@ const ExampleHooks = (props) => {
 
   const sd = {...props.style, background: 'blue', color: 'white'};
   const ss = { maxWidth: '50%', fontSize: 'xx-large' }
-  return <div style={sd}>
+  return <div style={sd} className={props.className}>
             <span style={ss}>Hello from {from}</span>
          </div>;
 }

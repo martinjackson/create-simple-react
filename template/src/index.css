@@ -1,0 +1,21 @@
+
+.parent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    height: 100%;
+  }
+  
+.kid {
+    max-width: 50%;
+    height: 29%;
+    width: 29%;
+    margin: 4;
+    border: black;
+    border-style: solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  

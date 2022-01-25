@@ -1,0 +1,7 @@
+HOT_PORT=9000
+API_PORT=4100
+debug=true
+#
+title=Your Title Here
+alertLogo=./logo192.png
+titleLogo=Logo.png
