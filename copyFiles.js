@@ -13,6 +13,9 @@ function logRed(msg) {
 function logGreen(msg) {
   console.log(`${asci.green(msg)}`);
 }
+function logYellow(msg) {
+  console.log(`${asci.yellow(msg)}`);
+}
 
 function logErrorAndStop(msg, err) {
   logRed(msg);
@@ -43,6 +46,13 @@ function filePrep(verbose, file, dest, fromDir, toDir) {
       const name = padLeft(dest, 22)
       logGreen(`${name} => ${toDir}`)
     }
+    else {
+      if (verbose) {
+        const name = padLeft(dest, 22)
+        logYellow(`skipping ${name} => ${toDir}`)
+      }
+  
+    }
   }
   return [fromFile, toFile, shouldCopy];  // not a dir and does not exist
 }
@@ -61,6 +71,7 @@ function copyFiles(root, toSubDir, verbose) {
   let fromDir = (toSubDir) ? path.join(__dirname, 'template', toSubDir) : path.join(__dirname, 'template');
   let toDir = (toSubDir) ? path.join(root, toSubDir) : path.join(root);
   const files = fse.readdirSync(fromDir);
+
   files.forEach((file) => {
     // workaround .gitignore filtered out of npm commit
     let dest = file;
