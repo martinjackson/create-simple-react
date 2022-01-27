@@ -72,8 +72,10 @@ function copyFiles(root, toSubDir, verbose) {
   let toDir = (toSubDir) ? path.join(root, toSubDir) : path.join(root);
   const files = fse.readdirSync(fromDir);
 
-  logYellow('files:', files)
-  
+  logYellow(`from Dir:   ${fromDir}`)
+  logYellow(`to Dir:     ${toDir}  `)
+  logYellow(`files:  ${files}`)
+
   files.forEach((file) => {
     // workaround .gitignore filtered out of npm commit
     let dest = file;
