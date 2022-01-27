@@ -72,9 +72,9 @@ function copyFiles(root, toSubDir, verbose) {
   let toDir = (toSubDir) ? path.join(root, toSubDir) : path.join(root);
   const files = fse.readdirSync(fromDir);
 
-  logYellow(`from Dir:   ${fromDir}`)
-  logYellow(`to Dir:     ${toDir}  `)
-  logYellow(`files:  ${files}`)
+  // logYellow(`from Dir:   ${fromDir}`)
+  // logYellow(`to Dir:     ${toDir}  `)
+  // logYellow(`files:  ${files}`)
 
   files.forEach((file) => {
 
@@ -91,7 +91,7 @@ function copyFiles(root, toSubDir, verbose) {
 
     if (file.endsWith('-sh.txt'))  
       dest = file.replace('-sh.txt', '.sh')
-      
+
     const [fromFile, toFile, shouldCopy] = filePrep(verbose, file, dest, fromDir, toDir);
 
     // default  , { overwrite:true } )
