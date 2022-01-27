@@ -77,15 +77,21 @@ function copyFiles(root, toSubDir, verbose) {
   logYellow(`files:  ${files}`)
 
   files.forEach((file) => {
-    // workaround .gitignore filtered out of npm commit
+
+    // workaround npx filters out files
     let dest = file;
     if (file === 'env')
       dest = '.env';
+
     if (file === 'gitignore')
       dest = '.gitignore';
+
     if (file === 'eslintrc.js')
       dest = '.eslintrc.js';
 
+    if (file.endsWith('-sh.txt'))  
+      dest = file.replace('-sh.txt', '.sh')
+      
     const [fromFile, toFile, shouldCopy] = filePrep(verbose, file, dest, fromDir, toDir);
 
     // default  , { overwrite:true } )
