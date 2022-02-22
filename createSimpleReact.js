@@ -71,15 +71,17 @@ function doIt(name, verbose, skip) {
     @babel/plugin-proposal-private-property-in-object
     @babel/preset-env
     @babel/preset-react
-    babel-loader
-    mini-css-extract-plugin
-    css-loader    
-    sass
-    sass-loader
     assert
-    stream-browserify
+    autoprefixer
+    babel-loader
     browserify-zlib
+    css-loader    
+    mini-css-extract-plugin
+    postcss
+    postcss-loader
     process
+    stream-browserify
+    tailwindcss
     webpack
     webpack-cli
     webpack-dev-middleware

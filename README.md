@@ -1,52 +1,27 @@
 # create-simple-react
 
-An alternative to create-react-app, no eject, opinionated for a shop standard.
+A "Quick Start" for React on the frontend and NodeJS on the backend.
+An alternative to other ways to start a React project.  This will create a project ready for production 
+or a play area to trry out React.
 
-_Would you like a feature comparision between this project and React's create-react-app?_
-
-There is no ejecting !!  for those you want to tinker, the config files
-are in the root directory with the package.json file.  If you mess them up, you have two choices:
-- use git to revert back
-- remove the messed up files and  run create-simple-react on the same directory again. It will restore
-the original config files.
-_Note: create-simple-react will not replace existing files_
-
-This project was ruled by these concepts:
-
-1. K.I.S.S. -- Keep It Sublimely Simple
-2. D.R.Y. -- Don't Repeat Yourself
-3. Everything in plain sight
-4. React Frontend, NodeJS backend example
-5. Project structure near ready for Production (just change webpack config from development to production, add minifiy)
-
-__Please send ideas on improvements__
-
-Version 0.6.1    Example code for both React Class and React Hooks (Jest test examples too!)
-Version 0.9.0    Upgraded to Webpack 5
-Version 0.10.0   Tested with older version of NodeJS
-
-## Minimum requirements
-
-NodeJS  10.x -> 14.15.1
-
-- send email to martin.a.jackson@gmail.com on earlier or later versions mention  your platform
-  - Ubuntu 18.04, 20.04, RaspberryPi 3/4, Mac OS, Win10 1803/1909
-  - we will put the list here
-
-
-
-## How to use
+## Creating a new Project
 
 ```bash
 npm init simple-react [New Project Directory] {--verbose} {--help}
 ```
-
 ### Example
 
 ```bash
 cd ~/projects
-npm init simple-react lab-status
+npm init simple-react@latest lab-status
 ```
+__-OR-__
+
+```bash
+cd ~/projects
+npx create-simple-react@latest lab-status
+```
+
 
    3 minutes later...
 
@@ -58,6 +33,57 @@ npm start
    open a browser to [http://localhost:8080](http://localhost:8080)
 
 ------------------------------------------------------
+
+There is no ejecting !!  
+
+This project was ruled by these concepts:
+
+1. K.I.S.S. -- Keep It Sublimely Simple
+2. D.R.Y. -- Don't Repeat Yourself
+3. Everything in plain sight
+4. React Frontend, NodeJS backend example
+5. Project structure near ready for Production (just change webpack config from development to production, add minifiy)
+
+__Please send ideas on improvements__
+
+| Release        |  New features                                                                |
+|----------------|------------------------------------------------------------------------------|
+| Version 0.6.1  |  Example code for both React Class and React Hooks (Jest test examples too!) |
+| Version 0.9.0  |  Upgraded to Webpack 5                                                       |
+| Version 0.10.0 |  Tested with older version of NodeJS                                         |
+| Version 1.0.0  |  NodeJS 16, npm 8,                                                           |
+| Version 1.1.0  |  Added [TailwindCSS](https://tailwindcss.com/) support                       |
+## Current Stack
+
+| Layer    | Version |
+|----------|---------|
+| NodeJS   | 16.14.0 |
+| Express  | 4.17.3  |
+| React    | 17.0.2  |
+
+## Project Tools
+
+| Layer       | Version |
+|-------------|---------|
+| npm         | 8.5.0   |
+| Webpack     | 5.69.1  | 
+| Babel       | 7.16.x  |
+| dotEnv      | 16.0.0  |
+| PostCSS     | 8.4.6   |
+| TailwindCSS | 3.0.23  |
+
+- send email to martin.a.jackson@gmail.com on earlier or later versions mention  your platform
+  - Ubuntu 18.04, 20.04, RaspberryPi 3/4, Mac OS, Win10 1803/1909
+  - we will put the list here
+
+
+## for those you want to tinker ...
+the config files are in the root directory with the package.json file.  If you mess them up, you have two choices:
+- use git to revert back
+- remove the messed up files and  run create-simple-react on the same directory again. It will restore
+the original config files.
+_Note: create-simple-react will not replace existing files_
+
 
 ### What you get out of the box
 
