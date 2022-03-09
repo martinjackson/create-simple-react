@@ -77,10 +77,12 @@ function doIt(name, verbose, skip) {
     browserify-zlib
     css-loader    
     mini-css-extract-plugin
+    npm-run-all
     postcss
     postcss-loader
     process
     stream-browserify
+    style-loader
     tailwindcss
     webpack
     webpack-cli
@@ -93,19 +95,22 @@ function doIt(name, verbose, skip) {
   const projectScripts = {
     main: "index.js",
     "scripts": {
-      "test": "jest",
-      "lint": "eslint src/**/*.js",
-      "prep": "node watch-env.js",
-      "start": "sudo npm run back && sudo npm run front",
-      "front": "node watch-env.js --watch & HOSTNAME=$(hostname --fqdn) webpack serve",
+      "test":  "jest",
+      "lint":  "eslint src/**/*.js",
+      "prep": "npx watch-env",
+      "watch": "npx watch-env --watch &",
+      "pack": "webpack",
+      "front": "webpack serve",
       "back": "cd server && ./start.sh",
-      "build": "node watch-env.js && HOSTNAME=$(hostname --fqdn) webpack"
+      "build": "run-s prep pack",
+      "start": "run-s watch back front",
+      "prod": "run-s build back"
     },
   }
 
   const createServerPackageJsonCMDs = [
     'npm init -y',
-    'npm install --save express serve-index dotenv'
+    'npm install --save express serve-index dotenv service-already-running'
   ]
 
   const serverScripts = {

@@ -2,6 +2,8 @@
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
+const execSync = require('child_process').execSync;
+
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
@@ -10,7 +12,9 @@ dot.config({ path: './.env' })
 
 // Take the constants from the .env file and make them available as process.env.NAME
 
-const HOSTNAME = process.env.HOSTNAME
+// const HOSTNAME = process.env.HOSTNAME    this required setting HOSTNAME in package.json
+const HOSTNAME = execSync('hostname --fqdn').toString().trim();
+
 const HOT_PORT = process.env.HOT_PORT
 const API_PORT = process.env.API_PORT
 
@@ -31,34 +35,22 @@ let info = {
   module: {
     rules: [
       {
-        test: /\.(scss|css)$/,
-        use: [MiniCssExtractPlugin.loader, 
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
               importLoaders: 1
             }
           },
-          'postcss-loader'],
+          'postcss-loader'
+        ]
       },
       {
         test: /\.(js|jsx)$/,
         exclude: [ /node_modules/ ],
         use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-                        '@babel/preset-env',
-                        '@babel/preset-react'
-            ],
-            plugins: [
-                       '@babel/plugin-proposal-object-rest-spread',
-                       '@babel/plugin-proposal-optional-chaining',
-                       ["@babel/plugin-proposal-class-properties", {"loose": true} ],
-                       ["@babel/plugin-proposal-private-methods", { "loose": true }],
-                       ["@babel/plugin-proposal-private-property-in-object", { "loose": true }]
-            ]
-          }
+          loader: 'babel-loader'
         }
       },
 
@@ -129,21 +121,26 @@ let info = {
     port: HOT_PORT,
     allowedHosts: 'all',
 
-    proxy: {  '/api/*': `https://localhost:${API_PORT}`,  }   // <- backend
+    proxy: {  '/api/*': `https://${HOSTNAME}:${API_PORT}`,  }   // <- backend
   }
 };
 
 async function configInfo() {
-    console.log('');
-    console.log('*****************************************');
-    console.log('* if running   npm start   use           ');
-    console.log(`*      https://localhost:${HOT_PORT}          (VSCode port forwarding)`);
-    console.log(`*      https://${HOSTNAME}:${HOT_PORT}   `);
-    console.log('*  expect API services on                ');
-    console.log(`*      https://localhost:${API_PORT}          (VSCode port forwarding)`);
-    console.log(`*      https://${HOSTNAME}:${API_PORT}   `);
-    console.log('*****************************************');
-    console.log('')
+    const isDevServer = process.env.WEBPACK_DEV_SERVER;
+    const isWebpackServe = process.env.WEBPACK_SERVE;
+
+    if (isDevServer || isWebpackServe) {
+        console.log('');
+        console.log('*****************************************');
+        console.log('* Running   npm start   use              ');
+        console.log(`*      https://${HOSTNAME}:${HOT_PORT}   `);
+        console.log('*  expect API services on                ');
+        console.log(`*      https://${HOSTNAME}:${API_PORT}   `);
+        console.log(`*                                        `);
+        console.log(`* Several things broken using localhost. `);   // Form submission, ssl certs, multiple pop-up windows
+        console.log('*****************************************');
+        console.log('')
+    }
 
   return info
 }
